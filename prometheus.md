@@ -5,7 +5,7 @@
 
 Các monitoring tool giúp đạt được các mục tiêu này bằng cách giám sát các số liệu như liệu ứng dụng hoặc dịch vụ có phản hồi hay không, tốc độ phản hồi và mức độ sử dụng của bộ nhớ, băng thông mạng hoặc thời gian CPU.
 
-+ `Logging`: được tạo bởi các ứng dụng, máy chủ, cơ sở hạ tầng mạng. Logging được sử dụng để thể hiện các biến đổi trạng thái trong một ứng dụng. Khi xảy ra sự cố, chúng tôi cần log để thiết lập thay đổi trạng thái gây ra lỗi. Hay nói cách khác, logging gi lại toàn bộ hoạt động diễn ra trong từng thời điểm. Điều này đẫn đến khó khăn trong việc lưu trữ log data.
++ `Logging`: được tạo bởi các ứng dụng, máy chủ, cơ sở hạ tầng mạng. Logging được sử dụng để thể hiện các biến đổi trạng thái trong một ứng dụng. Khi xảy ra sự cố, chúng ta cần log để thiết lập thay đổi trạng thái gây ra lỗi. Hay nói cách khác, logging ghi lại toàn bộ hoạt động diễn ra trong từng thời điểm. Điều này đẫn đến khó khăn trong việc lưu trữ log data.
 
 + `Tracing`: Bằng cách truy tìm thông qua một ngăn xếp, các nhà phát triển có thể xác định các vấn đề và tập trung vào việc cải thiện hiệu suất. Khi xảy ra sự có, bạn có thể tìm hiểu và tìm ra cách để đến khắc phục sự cố đó.
 
