@@ -1,10 +1,5 @@
-  
-
-  
-
-## Giới thiệu cơ bản về Prometheus
-
-### Monitoring là gì? Khác gì với Logging và Tracing
+# Giới thiệu cơ bản về Prometheus
+## Monitoring là gì? Khác gì với Logging và Tracing
 
 + `Monitoring`: là quá trình thu thập, phân tích và sử dụng thông tin có hệ thống để theo dõi tiến trình của chương trình nhằm đưa ra hướng dẫn, quyết định quản lý. Monitoring được tiến hành sau khi một chương trình đã bắt đầu và tiếp tục trong suốt thời gian thực hiện chương trình.
 
@@ -12,25 +7,21 @@ Các monitoring tool giúp đạt được các mục tiêu này bằng cách gi
 
 + `Logging`: được tạo bởi các ứng dụng, máy chủ, cơ sở hạ tầng mạng. Logging được sử dụng để thể hiện các biến đổi trạng thái trong một ứng dụng. Khi xảy ra sự cố, chúng tôi cần log để thiết lập thay đổi trạng thái gây ra lỗi. Hay nói cách khác, logging gi lại toàn bộ hoạt động diễn ra trong từng thời điểm. Điều này đẫn đến khó khăn trong việc lưu trữ log data.
 
-+ `Tracing`: Bằng cách truy tìm thông qua một ngăn xếp, các nhà phát triển có thể xác định các vấn đề và tập trung vào việc cải thiện hiệu suất. Khi xảy ra sự có, bạn có thể tìm hiểu và tìm ra cách để đến khắc phục sự cố đó..
++ `Tracing`: Bằng cách truy tìm thông qua một ngăn xếp, các nhà phát triển có thể xác định các vấn đề và tập trung vào việc cải thiện hiệu suất. Khi xảy ra sự có, bạn có thể tìm hiểu và tìm ra cách để đến khắc phục sự cố đó.
 
 Monitoring giúp quản lý hiệu suất ứng dụng, trong khi logging là để ghi lại tất cả về việc quản lý dữ liệu bên trong log files, tracing để truy đến các vấn đề của ứng dụng.
 
-  
+## Prometheus là gì?
 
-### Prometheus là gì?
+Prometheus là một open-source systems monitoring và alerting ban đầu được xây dựng tại SoundCloud. Vào năm 2012 nhiều công ty, tổ chức đã đứng ra bảo trợ cho Prometheus và project này cực kỳ phát triển, có rất nhiều người dùng. Hiện tại nó không còn là một project độc lập mà được phát triển bởi rất nhiều công ty khác nhau. Nó sử dụng mã nguồn GoLang của google. Hiện tại thì Prometheus 100% là open source.
 
-  
+## Tính năng
 
-Prometheus là một open-source systems monitoring và alerting ban đầu được xây dựng tại SoundCloud. Vào năm 2012 nhiều công ty, tổ chức đã đứng ra bảo trợ cho Prometheus, và project này cực kỳ và phát và có rất nhiều người dùng. Hiện tại nó không còn là một project độc lập mà được phát triển bởi rất nhiều công ty khác nhau. Nó sử dụng mã nguồn GoLang của google. Hiện tại thì Prometheus 100% là open source.
++ Mô hình dữ liệu đa chiều - time series được xác định bởi tên của số liệu(metric) và các cặp key/value.
 
-### Tính năng
++ Ngôn ngữ truy vấn linh hoạt.
 
-+ Mô hình dữ liệu đa chiều - time series được xác định bởi tên của số liệu(metric) và các cặp key/value
-
-+ Ngôn ngữ truy vấn linh hoạt
-
-+ Hỗ trợ nhiều chế độ biểu đồ
++ Hỗ trợ nhiều chế độ biểu đồ.
 
 + Nhiều chương trình tích hợp và hỗ trợ bởi bên thứ 3.
 
@@ -42,9 +33,7 @@ Prometheus là một open-source systems monitoring và alerting ban đầu đư
 
 + Các máy chủ/thiết bị giám sát có thể được phát hiện thông qua service discovery hoặc cấu hình tĩnh.
 
-  
-
-#### Data mode
+### Data model
 
 + Prometheus lưu trữ data dưới dạng **time series**.
 
@@ -52,11 +41,9 @@ Prometheus là một open-source systems monitoring và alerting ban đầu đư
 
 + Ngoài việc lưu trữ time series, Prometheus có thể tạo ra các time series.
 
-Các `time series` được định danh duy nhất bằng `_metric name_` và `_key-value pairs`- còn được gọi là `_labels_`. Key mô tả những gì bạn đang đo trong khi value lưu trữ giá trị đo thực tế, dưới dạng số.
+Các `time series` được định danh duy nhất bằng `_metric name_` và `_key-value pairs`- còn được gọi là `_labels_`. Key mô tả những gì bạn đang đo trong khi value lưu trữ giá trị đo thực tế, dưới dạng số.  
 
-  
-
-**Metric name** Tên số liệu chỉ định tính năng chung của hệ thống được đo. Ví dụ: http_requests_total - Tổng số yêu cầu HTTP nhận được
+**Metric name** Tên số liệu chỉ định tính năng chung của hệ thống được đo. Ví dụ: http_requests_total - Tổng số yêu cầu HTTP nhận được.
 
 **Lables** Sử dụng nhãn để phân biệt các đặc điểm của thứ đang được đo:
 
@@ -64,31 +51,25 @@ Các `time series` được định danh duy nhất bằng `_metric name_` và `
 
 `api_request_duration_seconds` - Phân biệt các giai đoạn yêu cầu: `stage="extract|transform|load"`
 
-  
-
 **Sample**:  Các sample thành dữ liệu chuỗi thời gian thực tế. Mỗi mẫu bao gồm:
 
-+ Một giá trị float64  
-+ Dấu thời gian chính xác đến ms
++ Một giá trị float64.
+
++ Dấu thời gian chính xác đến ms.
 
 **Notation**: Đặt tên số liệu và bộ nhãn
-
 ```
 
 <metric name>{<label name>=<label value>, …}
 
 ```
-
 ví dụ: 
 ```
 api_http_requests_total{method="POST", handler="/messages"}
 ```
+### Metric types
 
-  
-
-#### Metric type
-
-Có 4 loại metric”
+Có 4 loại `metric`
 
 **Counter**: Có giá trị là số, giá trị chỉ có thể được tăng lên chứ không thể giảm đi. Được sử dụng trong các trường hợp như đếm số request, task complete, errors occurred,..
 
@@ -97,31 +78,27 @@ Có 4 loại metric”
 **Histogram**: Là metrics mà sẽ cung cấp nhiều time-series: 1 cho mỗi bucket, 1 cho tổng các giá trị và 1 cho đếm các events đã thấy. Ví dụ như thời gian response.
 
 + histogram_quantile(φ float, b instant-vector), φ tính toán lượng tử (0≤ φ ≤ 1), từ các buckets b của một histogram
-
-ví dụ: Lượng tử được tính cho mỗi kết hợp nhãn trong `http_request_duration_seconds`. Để tổng hợp, sử dụng `sum()`. Vì nhãn `le` được yêu cầu bởi histogram_quantile (), nên nó phải được bao gồm trong mệnh đề `by`. Biểu thức sau đây tổng hợp 90th percentile  by job:
+ví dụ: Lượng tử được tính cho mỗi kết hợp nhãn trong `http_request_duration_seconds`. Để tổng hợp, sử dụng `sum()`. Vì nhãn `le` được yêu cầu bởi histogram_quantile(), nên nó phải được bao gồm trong mệnh đề `by`. Biểu thức sau đây tổng hợp 90th percentile  by job:
 
 ```
 
-`histogram_quantile(0.9, sum(rate(http_request_duration_seconds_bucket[10m])) by (job, le))`
+histogram_quantile(0.9, sum(rate(http_request_duration_seconds_bucket[10m])) by (job, le))
 
 ```
 
 **Summary**: Cũng tương tự Histogram. Tuy nhiên nó có hỗ trợ thêm khả năng tính toán quantiles.
 
-+ **φ-quantiles**  (0 ≤ φ ≤ 1) để quan sát sự kiện, <basename>{quantile="<φ>”}
++ **φ-quantiles**  (0 ≤ φ ≤ 1) để quan sát sự kiện, <basename>{quantile="<φ>”}.
 
-+ Tính tổng của tất cả các giá trị quan sát <basename>_sum
++ Tính tổng của tất cả các giá trị quan sát <basename>_sum.
 
-+ Đếm các sự kiện đã được quan sát <basename>_count
++ Đếm các sự kiện đã được quan sát <basename>_count.
 
-  
-
-#### Job và Instances
+### Job và Instances
 
 + **Instance**: một instance là 1 label, dùng để định danh duy nhất cho target(một đối tượng sẽ được Prometheus đi lấy dữ liệu) trong một job.
 
-+ **Job**: là một tập hợp các target chung một nhóm mục đích(vd: giám sát một nhóm các dịch vụ database,…)
-
++ **Job**: là một tập hợp các target chung một nhóm mục đích(vd: giám sát một nhóm các dịch vụ database,…).
 ví dụ: job api-server
 
 + instance 1: `1.2.3.4:5670`
@@ -132,22 +109,17 @@ ví dụ: job api-server
 
 + instance 4: `5.6.7.8:5671`
 
-instance : `<host>`:`<port>` (host, port có thể là địa chỉ IP và địa chỉ cổng)
+instance : `<host>`:`<port>` (host, port có thể là địa chỉ IP và địa chỉ cổng).
 
-  
+## Kiến trúc
 
-  
-
-  
-
-### Kiến trúc
 ![](https://github.com/toantd1202/buoc1/blob/master/Screenshot%20from%202020-03-30%2021-11-47.png?raw=true)
 
-**Prometheus** thực hiện quá trình lấy các metric từ các job được chỉ định qua kên trực tiếp hoặc thông qua dịch vụ Pushgateway trung gian. Sau đó nó sẽ lưu trữ dữ liệu thu thập được ở local host. Tiếp đến sẽ chạy các rule để xử lý các dữ liệu theo nhu cầu cũng như kiểm tra thực hiện các cảnh báo mong muốn.
+**Prometheus** thực hiện quá trình lấy các metric từ các job được chỉ định qua kênh trực tiếp hoặc thông qua dịch vụ Pushgateway trung gian. Sau đó nó sẽ lưu trữ dữ liệu thu thập được ở local host. Tiếp đến sẽ chạy các rule để xử lý các dữ liệu theo nhu cầu cũng như kiểm tra thực hiện các cảnh báo mong muốn.
 
-### Các thành phần
+## Các thành phần
 
-+ Máy chủ Prometheus đảm bảo việc nhận dữ liệu và lưu trữ dữ liệu time-series
++ Máy chủ Prometheus đảm bảo việc nhận dữ liệu và lưu trữ dữ liệu time-series.
 
 + Client libraries cho các ứng dụng.
 
@@ -155,11 +127,11 @@ instance : `<host>`:`<port>` (host, port có thể là địa chỉ IP và đị
 
 + Exporter hỗ trợ giám sát các dịch vụ hệ thống và gửi về Prometheus theo chuẩn Prometheus mong muốn.
 
-+ AlertManager: dịch vụ quản lý, xử lý các cảnh báo (alert)
++ AlertManager: dịch vụ quản lý, xử lý các cảnh báo (alert).
 
 + Có rất nhiều công cụ hỗ trợ khác.
 
-### Một số thuật ngữ
+## Một số thuật ngữ
 
 + **Time-series Data**: là chuỗi các điểm dữ liệu, thường bao gồm các phép đo liên tục được thực hiện từ cùng một nguồn trong một khoảng thời gian.
 
@@ -173,7 +145,7 @@ instance : `<host>`:`<port>` (host, port có thể là địa chỉ IP và đị
 
 + **Instance**: một instance là 1 label, dùng để định danh duy nhất cho target trong một job.
 
-+ **Job**: là một tập hợp các target chung một nhóm mục đích(vd: giám sát một nhóm các dịch vụ database,…)
++ **Job**: là một tập hợp các target chung một nhóm mục đích(vd: giám sát một nhóm các dịch vụ database,…).
 
 + **PromQL**: là viết tắt của Prometheus Query Language, ngôn ngữ này cho phép thực hiệc các hoạt động liên quan đến dữ liệu metric.
 
@@ -181,15 +153,13 @@ instance : `<host>`:`<port>` (host, port có thể là địa chỉ IP và đị
 
 + **Target**: định nghĩa một đối tượng sẽ được Prometheus đi lấy dữ liệu(scrape).
 
-  
-
-### Trường hợp sử dụng Prometheus
+## Trường hợp sử dụng Prometheus
 
 Prometheus hoạt động với việc ghi lại chuỗi thời gian hoàn toàn bằng số. Nó phù hợp với cả giám sát tập trung vào máy cũng như giám sát các kiến trúc hướng dịch vụ rất năng động. Trong microservice, sự hỗ trợ của nó cho việc thu thập và truy vấn dữ liệu đa chiều, đó là một thế mạnh đặc biệt.
 
 Prometheus được thiết kế để đảm bảo độ tin cậy, là hệ thống sử dụng trong thời gian ngừng hoạt động để cho phép bạn chẩn đoán nhanh các sự cố. Mỗi máy chủ Prometheus là độc lập, không phụ thuộc vào lưu trữ mạng hoặc các dịch vụ từ xa khác. Bạn có thể dựa vào nó khi các phần khác trong cơ sở hạ tầng của bạn bị hỏng và bạn không cần thiết lập cơ sở hạ tầng mở rộng để sử dụng nó.
 
-### Trường hợp không sử dụng Prometheus:
+## Trường hợp không sử dụng Prometheus:
 
 Prometheus values reliability. Bạn luôn có thể xem những số liệu thống kê có sẵn về hệ thống của bạn, ngay cả trong điều kiện thất bại. Nếu bạn cần độ chính xác 100%, chẳng hạn như thanh toán theo yêu cầu, Prometheus không phải là một lựa chọn tốt vì dữ liệu được thu thập có thể sẽ không được chi tiết và đầy đủ. Trong trường hợp như vậy, tốt nhất bạn nên sử dụng một số hệ thống khác để thu thập và phân tích dữ liệu để thanh toán và Prometheus cho phần còn lại của việc theo dõi của bạn.
 
