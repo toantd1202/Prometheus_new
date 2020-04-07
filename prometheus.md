@@ -41,7 +41,7 @@ Prometheus là một open-source systems monitoring và alerting ban đầu đư
 
 + Ngoài việc lưu trữ time series, Prometheus có thể tạo ra các time series.
 
-Các `time series` được định danh duy nhất bằng `_metric name_` và `_key-value pairs`- còn được gọi là `_labels_`. Key mô tả những gì bạn đang đo trong khi value lưu trữ giá trị đo thực tế, dưới dạng số.  
+Các `time series` được định danh duy nhất bằng `metric name` và `key-value pairs`- còn được gọi là `labels`. Key mô tả những gì bạn đang đo trong khi value lưu trữ giá trị đo thực tế, dưới dạng số.  
 
 **Metric name** Tên số liệu chỉ định tính năng chung của hệ thống được đo. Ví dụ: http_requests_total - Tổng số yêu cầu HTTP nhận được.
 
@@ -90,13 +90,24 @@ histogram_quantile(0.9, sum(rate(http_request_duration_seconds_bucket[10m])) by 
 
 + **φ-quantiles**  (0 ≤ φ ≤ 1) để quan sát sự kiện, <basename>{quantile="<φ>”}.
 
-+ Tính tổng của tất cả các giá trị quan sát <basename>_sum.
++ Tính tổng của tất cả các giá trị quan sát `<basename>_sum`.
 
-+ Đếm các sự kiện đã được quan sát <basename>_count.
++ Đếm các sự kiện đã được quan sát `<basename>_count`.
+  
+  
+  **So sánh Histogram vs Summary**
+
+|  | Histogram | Summary | 
+| ------------- |:-------------:| -----:|
+| Cấu hình yêu cầu | Xác định trước giới hcủa các buckets cho giá trị quan sát | Xác định trước φ-quantiles và sliding windows |
+| Client performance | Các quan sát cần ít tài nguyên vì chỉ cần counters | Các quan sát tốn tài nguyên  hơn do phải stream những phép tính quantile |
+|Server performance|Máy chủ phải tính toán lượng tử. Có thể sử dụng recording rules nếu quá trình tính toán đặc biệt mất quá nhiều thời gian|không tốn tài nguyên vì đã thực hiện trên máy chủ ứng dụng|
+|Số time series|Một time series cho mỗi bucket được cấu hình|Nhiều time series cho mỗi lượng tử được cấu hình|
+|Trường hợp sử dụng |tính trung bình hoặc phần trăm, có thể sử dụng giá trị gần đúng, xác định phạm vi của các giá trị|cần tính toán các lượng tử chính xác, khi không thể chắc chắn phạm vi của các giá trị|
 
 ### Job và Instances
 
-+ **Instance**: một instance là 1 label, dùng để định danh duy nhất cho target(một đối tượng sẽ được Prometheus đi lấy dữ liệu) trong một job.
++ **Instance**: một instance là 1 label, dùng để định danh duy nhất cho target(một đối tượng sẽ được Prometheus đi lấy dữ liệu) trong một job, instance : `<host>`:`<port>` (host, port có thể là địa chỉ IP và địa chỉ cổng).
 
 + **Job**: là một tập hợp các target chung một nhóm mục đích(vd: giám sát một nhóm các dịch vụ database,…).
 ví dụ: job api-server
@@ -109,13 +120,17 @@ ví dụ: job api-server
 
 + instance 4: `5.6.7.8:5671`
 
-instance : `<host>`:`<port>` (host, port có thể là địa chỉ IP và địa chỉ cổng).
+
 
 ## Kiến trúc
 
 ![](https://github.com/toantd1202/buoc1/blob/master/Screenshot%20from%202020-03-30%2021-11-47.png?raw=true)
 
 **Prometheus** thực hiện quá trình lấy các metric từ các job được chỉ định qua kênh trực tiếp hoặc thông qua dịch vụ Pushgateway trung gian. Sau đó nó sẽ lưu trữ dữ liệu thu thập được ở local host. Tiếp đến sẽ chạy các rule để xử lý các dữ liệu theo nhu cầu cũng như kiểm tra thực hiện các cảnh báo mong muốn.
+
+Kênh trực tiếp là các Exporter ví dụ như:
++ cAdvisor: export các metrics của các docker service, các process trên server.
++ Node Exporter: export các metrics một node (ví dụ như là một server) như CPU, RAM của node, dung lượng ổ đĩa, số lượng request tới node đấy,...
 
 ## Các thành phần
 
