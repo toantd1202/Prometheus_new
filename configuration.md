@@ -19,7 +19,7 @@ kiểm tra hoạt động: 127.0.0.1:9090
 
 ![](https://github.com/toantd1202/buoc1/blob/master/Screenshot%20from%202020-04-01%2021-38-04.png?raw=true)
 
-#### Prometheus + Grafana
+## Prometheus + Grafana
 Chỉnh sửa, thêm code vào docker-compose.yml
 ```
 version: '3.6'
@@ -53,7 +53,7 @@ Truy cập [http://localhost:3000](http://localhost:3000/) để vào trang dash
 ![enter image description here](https://github.com/toantd1202/buoc1/blob/master/Screenshot%20from%202020-04-01%2022-17-52.png?raw=true)
 
 
-#### Cấu hình node exporter
+## Cấu hình node exporter
 Theo dõi các số liệu về hạ tầng, bao gồm CPU, memory, disk usage cũng như số liêu I/O, network.
 + thêm nội dung vào file prometheus.yml:
 ```
@@ -107,6 +107,86 @@ services:
 kiểm tra thành quả:
 
 ![](https://github.com/toantd1202/buoc1/blob/master/Screenshot%20from%202020-04-02%2001-03-52.png?raw=true)
+
+## Prometheus + cAdvisor
+cAdvisor: là một agent mã nguồn mở dùng để phân tích perfomance và trạng thái sử dụng tài nguyên container. Vì nó được thiết lập chuyên dụng cho container, nên thực sự nó suppport cho các Docker container.
+
+cAdvisor:  cung cấp cho người dùng container hiểu về việc sử dụng tài nguyên và các đặc tính hiệu suất của các container đang chạy. Nó là một daemon chạy để thu thập, tổng hợp, xử lý và xuất thông tin về các container đang hoạt động. Cụ thể, đối với mỗi container, nó giữ các tham số cách ly tài nguyên, lịch sử sử dụng tài nguyên , biểu đồ lịch sử sử dụng tài nguyên hoàn chỉnh và thống kê mạng. Dữ liệu này được export bằng container và machine-wide. CAdvisor có hỗ trợ riêng cho các  Docker container và nên hỗ trợ bất kỳ loại container.
+
+cAdvisor: export các metrics của các docker service, các process trên server.
+
++ Chỉnh sửa file docker-compose.yml
+```
+version: '3.6'
+volumes:
+  grafana-data:
+  prometheus-data: {}
+services:
+  prometheus:
+    image: prom/prometheus:v2.12.0
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus_recording_rules.yml:/etc/prometheus/prometheus_recording_rules.yml
+      - prometheus-data:/prometheus
+  grafana:
+    image: grafana/grafana
+    volumes:
+      - grafana-data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    ports:
+      - 3000:3000
+  node-exporter:
+    image: prom/node-exporter
+    ports:
+       - 9100:9100
+  cadvisor:
+    image: 'google/cadvisor:latest'
+    container_name: cadvisor
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    ports:
+       - 8080:8080
+```
++ Chỉnh sửa file prometheus.yml:
+```
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+- job_name: 'prometheus'
+  static_configs:
+  - targets: ['localhost:9090']
+- job_name: 'node-exporter'
+  static_configs:
+  - targets: ['node-exporter:9100']
+- job_name: cadvisor
+  scrape_interval: 10s
+  static_configs:
+  - targets:
+    - cadvisor:8080
+rule_files:
+  - "prometheus_recording_rules.yml"
+```
++ `docker-compose up`
+
+![](https://github.com/toantd1202/buoc1/blob/master/Screenshot%20from%202020-04-08%2000-48-41.png?raw=true)
+
++ Kiểm tra trên [http://127.0.0.1:9090/targets](http://127.0.0.1:9090/targets)
+
+![](https://github.com/toantd1202/buoc1/blob/master/Screenshot%20from%202020-04-08%2001-06-25.png?raw=true)
+
++ Sử dụng grafana
+
+![](https://github.com/toantd1202/buoc1/blob/master/Screenshot%20from%202020-04-08%2001-22-28.png?raw=true)
+
 
 # Cấu hình Prometheus rules
 
