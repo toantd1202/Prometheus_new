@@ -129,7 +129,7 @@ groups:
     annotations:
       summary: High request latency
 ```
-Option for khiến Prometheus phải chờ trong một khoảng thời gian nhất định giữa lần đầu tiên gặp một phần tử vectơ đầu ra biểu thức mới và tính một cảnh báo là bắn cho phần tử này. Trong trường hợp này, Prometheus sẽ kiểm tra xem cảnh báo có tiếp tục hoạt động trong mỗi lần đánh giá trong 10 phút trước khi bắn cảnh báo không. Các yếu tố đang hoạt động, nhưng chưa kích hoạt, đang ở trạng thái chờ xử lý.
+Option `for` khiến Prometheus phải chờ trong một khoảng thời gian nhất định giữa lần đầu tiên gặp một phần tử vectơ đầu ra biểu thức mới và tính một cảnh báo là bắn cho phần tử này. Trong trường hợp này, Prometheus sẽ kiểm tra xem cảnh báo có tiếp tục hoạt động trong mỗi lần đánh giá trong 10 phút trước khi bắn cảnh báo không. Các yếu tố đang hoạt động, nhưng chưa kích hoạt, đang ở trạng thái chờ xử lý.
 
 `labels` cho phép chỉ định một bộ labels bổ sung được đính kèm với cảnh báo. Bất kỳ nhãn xung đột hiện có sẽ được ghi đè. Các giá trị nhãn có thể được tạo templated.
 
