@@ -53,7 +53,7 @@ Truy cập [http://localhost:3000](http://localhost:3000/) để vào trang dash
 ![enter image description here](https://github.com/toantd1202/buoc1/blob/master/Screenshot%20from%202020-04-01%2022-17-52.png?raw=true)
 
 
-#### cấu hình node exporter
+#### Cấu hình node exporter
 Theo dõi các số liệu về hạ tầng, bao gồm CPU, memory, disk usage cũng như số liêu I/O, network.
 + thêm nội dung vào file prometheus.yml:
 ```
@@ -100,7 +100,8 @@ services:
     ports:
        - 9100:9100
 ```
-docker-compose up 
++ docker-compose up
+
 ![](https://github.com/toantd1202/buoc1/blob/master/Screenshot%20from%202020-04-01%2023-19-21.png?raw=true)
 
 kiểm tra thành quả:
@@ -128,7 +129,7 @@ groups:
     annotations:
       summary: High request latency
 ```
-Optional for khiến Prometheus phải chờ trong một khoảng thời gian nhất định giữa lần đầu tiên gặp một phần tử vectơ đầu ra biểu thức mới và tính một cảnh báo là bắn cho phần tử này. Trong trường hợp này, Prometheus sẽ kiểm tra xem cảnh báo có tiếp tục hoạt động trong mỗi lần đánh giá trong 10 phút trước khi bắn cảnh báo không. Các yếu tố đang hoạt động, nhưng chưa kích hoạt, đang ở trạng thái chờ xử lý.
+Option for khiến Prometheus phải chờ trong một khoảng thời gian nhất định giữa lần đầu tiên gặp một phần tử vectơ đầu ra biểu thức mới và tính một cảnh báo là bắn cho phần tử này. Trong trường hợp này, Prometheus sẽ kiểm tra xem cảnh báo có tiếp tục hoạt động trong mỗi lần đánh giá trong 10 phút trước khi bắn cảnh báo không. Các yếu tố đang hoạt động, nhưng chưa kích hoạt, đang ở trạng thái chờ xử lý.
 
 `labels` cho phép chỉ định một bộ labels bổ sung được đính kèm với cảnh báo. Bất kỳ nhãn xung đột hiện có sẽ được ghi đè. Các giá trị nhãn có thể được tạo templated.
 
@@ -136,7 +137,7 @@ Optional for khiến Prometheus phải chờ trong một khoảng thời gian nh
 
   
 
-## templating
+## Templating
 
 Prometheus hỗ trợ tạo templating trong các annotations và label alerts, cũng như trong các console pages. Templates có khả năng chạy các truy vấn đối với cơ sở dữ liệu cục bộ, lặp lại dữ liệu, sử dụng các điều kiện, dữ liệu định dạng, v.v ... Ngôn ngữ Prometheus templating dựa trên hệ thống Go templating.
 
