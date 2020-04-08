@@ -192,28 +192,64 @@ rule_files:
 
 Prometheus hỗ trợ hai loại rules có thể được cấu hình và sau đó được đánh giá theo các khoảng thời gian: `Recording rules` và `Alerting rules`. Để thêm các rules trong Prometheus, hãy tạo một tệp chứa các câu lệnh rule cần thiết và để Prometheus tải tệp qua trường rule_files trong Prometheus configuration. Rule files sử dụng YAML.
 
+
+
 ## Alerting rules
+Alerting hoạt động trên Prometheus với 2 thành phần:
 
-Quy tắc cảnh báo cho phép bạn xác định các điều kiện cảnh báo dựa trên biểu thức Prometheus và gửi thông báo tới dịch vụ bên ngoài. Bất cứ khi nào biểu thức cảnh báo dẫn đến một hoặc nhiều thành phần vectơ tại một thời điểm nhất định, cảnh báo sẽ được tính là hoạt động cho các label của các thành phần này.
++  Alerting rules
++  Alertmanager
 
-ví dụ: 
+![](https://github.com/toantd1202/buoc1/blob/master/Screenshot%20from%202020-04-09%2000-21-55.png?raw=true)
+
++ Các quy tắc cảnh báo trong các máy chủ Prometheus gửi thông báo đến Alertmanager.
+
++ Alertmanager sau đó quản lý các cảnh báo đó, bao gồm silencing (im lặng), inhibition (ức chế), aggregation (tổng hợp) và gửi thông báo qua các phương thức như email, hệ thống thông báo cuộc gọi và chat platform (đề cập sau).
+
+
+**Alerting rules** cho phép bạn xác định các điều kiện cảnh báo dựa trên biểu thức Prometheus và gửi thông báo tới dịch vụ bên ngoài. Bất cứ khi nào biểu thức cảnh báo dẫn đến một hoặc nhiều thành phần vectơ tại một thời điểm nhất định, cảnh báo sẽ được tính là hoạt động cho các label của các thành phần này.
+```
+alert <alert name>
+  expr <expression>
+   for <duration> 
+   labels <label set> 
+   annotations <label set> 
+```  
+-   for: Chờ đợi trong 1 khoảng thời gian để đưa ra cảnh báo
+-   labels: Đặt nhãn cho cảnh báo
+-  annotations: Chứa thêm các thông tin cho cảnh báo
+ví dụ:
 ```
 groups:
 - name: example
   rules:
-  - alert: HighRequestLatency
-    expr: job:request_latency_seconds:mean5m{job="myjob"} > 0.5
-    for: 10m
-    labels:
-      severity: page
-    annotations:
-      summary: High request latency
+      - alert: http_request_total
+        expr: sum(prometheus_http_requests_total) > 20
+        for: 5m
+        labels:
+          severity: page
+        annotations:
+          summary: many requests :)
+
 ```
-Option `for` khiến Prometheus phải chờ trong một khoảng thời gian nhất định giữa lần đầu tiên gặp một phần tử vectơ đầu ra biểu thức mới và tính một cảnh báo là bắn cho phần tử này. Trong trường hợp này, Prometheus sẽ kiểm tra xem cảnh báo có tiếp tục hoạt động trong mỗi lần đánh giá trong 10 phút trước khi bắn cảnh báo không. Các yếu tố đang hoạt động, nhưng chưa kích hoạt, đang ở trạng thái chờ xử lý.
+Option `for` khiến Prometheus phải chờ trong một khoảng thời gian nhất định giữa lần đầu tiên gặp một phần tử vectơ đầu ra biểu thức mới và tính một cảnh báo là bắn cho phần tử này. Trong trường hợp này, Prometheus sẽ kiểm tra xem cảnh báo có tiếp tục hoạt động trong mỗi lần đánh giá trong 5 phút trước khi bắn cảnh báo không. Các yếu tố đang hoạt động, nhưng chưa kích hoạt, đang ở trạng thái chờ xử lý.
 
 `labels` cho phép chỉ định một bộ labels bổ sung được đính kèm với cảnh báo. Bất kỳ nhãn xung đột hiện có sẽ được ghi đè. Các giá trị nhãn có thể được tạo templated.
 
 `annotations` chỉ định một bộ nhãn thông tin có thể được sử dụng để lưu trữ thông tin bổ sung dài hơn như alert description hoặc runbook links. Các giá trị annotation có thể được tạo templated.
+
+**Kiểm tra các cảnh báo đang hoạt động**
++ Webside của Prometheus có tab "Alerts" show lên thông tin các alert đang hoạt động.
++ Alert có 2 chế độ (Pending và firing), chúng cũng đc lưu dưới dạng time series với dạng.
+```
+ALERTS{alertname="<alert name>", alertstate="pending|firing", <additional alert labels>}
+```
++ Nếu alert hoạt động sẽ có value là 1, ko hoạt động sẽ có value là 0.
+
+![](https://github.com/toantd1202/buoc1/blob/master/Screenshot%20from%202020-04-09%2000-43-54.png?raw=true)
+
+**Gửi thông báo**
+Để gửi các thông báo đi ta cần tới thành phần **Alertmanager**
 
   
 
