@@ -1,18 +1,17 @@
 # Giới thiệu cơ bản về Prometheus
 ## Monitoring là gì? Khác gì với Logging và Tracing
 
-+ **Monitoring**: là quá trình thu thập, phân tích và sử dụng thông tin có hệ thống để theo dõi tiến trình của chương trình nhằm đưa ra hướng dẫn, quyết định quản lý. Monitoring được tiến hành sau khi một chương trình đã bắt đầu và tiếp tục trong suốt thời gian thực hiện chương trình.
++ **Monitoring**: là quá trình thu thập, phân tích và sử dụng thông tin có hệ thống để theo dõi tiến trình của chương trình nhằm đưa ra hướng dẫn, quyết định quản lý. `Monitoring` được tiến hành sau khi một chương trình đã bắt đầu và tiếp tục trong suốt thời gian thực hiện chương trình.
 
-Các monitoring tool giúp đạt được các mục tiêu này bằng cách giám sát các số liệu như liệu ứng dụng hoặc dịch vụ có phản hồi hay không, tốc độ phản hồi và mức độ sử dụng của bộ nhớ, băng thông mạng hoặc thời gian CPU.
+Các `monitoring` tool giúp đạt được các mục tiêu này bằng cách giám sát các số liệu như liệu ứng dụng hoặc dịch vụ có phản hồi hay không, tốc độ phản hồi và mức độ sử dụng của bộ nhớ, băng thông mạng hoặc thời gian CPU.
 
-+ **Logging**: được tạo bởi các ứng dụng, máy chủ, cơ sở hạ tầng mạng. Logging được sử dụng để thể hiện các biến đổi trạng thái trong một ứng dụng. Khi xảy ra sự cố, chúng ta cần log để thiết lập thay đổi trạng thái gây ra lỗi. Hay nói cách khác, logging ghi lại toàn bộ hoạt động diễn ra trong từng thời điểm. Điều này đẫn đến khó khăn trong việc lưu trữ log data.
++ **Logging**: được tạo bởi các ứng dụng, máy chủ, cơ sở hạ tầng mạng. `Logging` được sử dụng để thể hiện các biến đổi trạng thái trong một ứng dụng. Khi xảy ra sự cố, chúng ta cần log để thiết lập thay đổi trạng thái gây ra lỗi. Hay nói cách khác, `logging` ghi lại toàn bộ hoạt động diễn ra trong từng thời điểm. Điều này đẫn đến khó khăn trong việc lưu trữ `log data`.
 
-+ **Tracing**: `tracing` liên quan đến việc sử dụng `logging` để ghi lại thông tin về việc thực hiện chương trình. Tùy thuộc vào loại và chi tiết thông tin có trong `logging`, tđược theo dõi bởi các quản trị viên hệ thống có kinh nghiệm hoặc nhân viên hỗ trợ kỹ thuật và bởi các công cụ giám sát phần mềm để chẩn đoán các sự cố phổ biến với phần mềm.
---> Thông tin này thường được các lập trình viên sử dụng cho mục đích gỡ lỗi.
-+  Được sử dụng chủ yếu bởi các nhà phát triển.
-+ Bởi vì đầu ra `tracing` được nhà phát triển sử dụng, nên các thông điệp không cần phải localized  (được bản địa hóa). Do đó, việc giữ các tin nhắn theo dõi tách biệt với các tài nguyên khác cần được bản địa hóa (như tin nhắn sự kiện) là rất quan trọng.
-+ Trong phần mềm độc quyền, dữ liệu `tracing` có thể bao gồm thông tin nhạy cảm về mã nguồn của sản phẩm.
-+ Trong các hệ điều hành, `tracing` đôi khi rất hữu ích trong các tình huống (như khởi động) trong đó một số công nghệ được sử dụng để cung cấp `logging` có thể không khả dụng.
++ **Tracing**: `tracing` liên quan đến việc sử dụng `logging` để ghi lại thông tin về việc thực hiện chương trình. Tùy thuộc vào loại và chi tiết thông tin có trong `logging`, tđược theo dõi bởi các quản trị viên hệ thống có kinh nghiệm hoặc nhân viên hỗ trợ kỹ thuật và bởi các công cụ giám sát phần mềm để chẩn đoán các sự cố phổ biến với phần mềm. Thông tin này thường được các lập trình viên sử dụng cho mục đích gỡ lỗi.
+  +  Được sử dụng chủ yếu bởi các nhà phát triển.
+  + Bởi vì đầu ra `tracing` được nhà phát triển sử dụng, nên các thông điệp không cần phải localized  (được bản địa hóa). Do đó, việc giữ các tin nhắn theo dõi tách biệt với các tài nguyên khác cần được bản địa hóa (như tin nhắn sự kiện) là rất quan trọng.
+  + Trong phần mềm độc quyền, dữ liệu `tracing` có thể bao gồm thông tin nhạy cảm về mã nguồn của sản phẩm.
+  + Trong các hệ điều hành, `tracing` đôi khi rất hữu ích trong các tình huống (như khởi động) trong đó một số công nghệ được sử dụng để cung cấp `logging` có thể không khả dụng.
 
 Monitoring giúp quản lý hiệu suất ứng dụng, trong khi logging là để ghi lại tất cả về việc quản lý dữ liệu bên trong log files, tracing để truy đến các vấn đề của ứng dụng.
 
