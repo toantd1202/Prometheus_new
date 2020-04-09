@@ -102,7 +102,7 @@ histogram_quantile(0.9, sum(rate(http_request_duration_seconds_bucket[10m])) by 
   **So sánh Histogram vs Summary**
 
 |  | Histogram | Summary | 
-| ------------- |:-------------:| -----:|
+| ------------- |:-------------:|:-----:|
 | Cấu hình yêu cầu | Xác định trước giới hcủa các buckets cho giá trị quan sát | Xác định trước φ-quantiles và sliding windows |
 | Client performance | Các quan sát cần ít tài nguyên vì chỉ cần counters | Các quan sát tốn tài nguyên  hơn do phải stream những phép tính quantile |
 |Server performance|Máy chủ phải tính toán lượng tử. Có thể sử dụng recording rules nếu quá trình tính toán đặc biệt mất quá nhiều thời gian|không tốn tài nguyên vì đã thực hiện trên máy chủ ứng dụng|
@@ -178,7 +178,7 @@ Prometheus hoạt động với việc ghi lại chuỗi thời gian hoàn toàn
 
 Prometheus được thiết kế để đảm bảo độ tin cậy, là hệ thống sử dụng trong thời gian ngừng hoạt động để cho phép bạn chẩn đoán nhanh các sự cố. Mỗi máy chủ Prometheus là độc lập, không phụ thuộc vào lưu trữ mạng hoặc các dịch vụ từ xa khác. Bạn có thể dựa vào nó khi các phần khác trong cơ sở hạ tầng của bạn bị hỏng và bạn không cần thiết lập cơ sở hạ tầng mở rộng để sử dụng nó.
 
-## Trường hợp không sử dụng Prometheus:
+## Trường hợp không sử dụng Prometheus
 
 Prometheus values reliability. Bạn luôn có thể xem những số liệu thống kê có sẵn về hệ thống của bạn, ngay cả trong điều kiện thất bại. Nếu bạn cần độ chính xác 100%, chẳng hạn như thanh toán theo yêu cầu, Prometheus không phải là một lựa chọn tốt vì dữ liệu được thu thập có thể sẽ không được chi tiết và đầy đủ. Trong trường hợp như vậy, tốt nhất bạn nên sử dụng một số hệ thống khác để thu thập và phân tích dữ liệu để thanh toán và Prometheus cho phần còn lại của việc theo dõi của bạn.
 
