@@ -251,8 +251,6 @@ ALERTS{alertname="<alert name>", alertstate="pending|firing", <additional alert 
 **Gửi thông báo**
 Để gửi các thông báo đi ta cần tới thành phần **Alertmanager**
 
-  
-
 ## Templating
 
 Prometheus hỗ trợ tạo templating trong các annotations và label alerts, cũng như trong các console pages. Templates có khả năng chạy các truy vấn đối với cơ sở dữ liệu cục bộ, lặp lại dữ liệu, sử dụng các điều kiện, dữ liệu định dạng, v.v ... Ngôn ngữ Prometheus templating dựa trên hệ thống Go templating.
@@ -265,8 +263,6 @@ type sample struct {
 }
 ```
 
-  
-
 ## Recording rules
 
 Recording rules cho phép bạn tính toán trước các biểu thức cần thiết lưu kết quả của chúng dưới dạng một time series mới. Truy vấn kết quả được tính toán trước thường sẽ nhanh hơn nhiều so với thực hiện biểu thức gốc mỗi khi cần. Điều này đặc biệt hữu ích cho dashboards, cần truy vấn cùng một biểu thức liên tục mỗi lần chúng refresh.
@@ -274,14 +270,14 @@ Recording rules cho phép bạn tính toán trước các biểu thức cần th
 Recording và alerting rules tồn tại trong một nhóm quy tắc. Các quy tắc trong một group được chạy tuần tự theo một khoảng thời gian. Tên của recording và alerting rules phải là metric names hợp lệ.
 
 + tạo 1 rule file thưc hiện tính phần trăm memory free
+
 ![](https://github.com/toantd1202/buoc1/blob/master/Screenshot%20from%202020-03-31%2021-36-02.png?raw=true)
 
 `record: <string>` (Tên của chuỗi thời gian để đầu ra. Phải là một metric name hợp lệ)
 `expr: <string>` (Biểu thức PromQL để đánh giá. Mỗi chu kỳ đánh giá này được đánh giá tại thời điểm hiện tại và kết quả được ghi lại dưới dạng một time series mới với metric name được đưa ra bởi 'record').
 
 + thêm `recording rule` mới tạo vào `prometheus.yml` tại mục `rule_files`
+
 ![](https://github.com/toantd1202/buoc1/blob/master/Screenshot%20from%202020-04-01%2010-00-55.png?raw=true)
 
 ![](https://github.com/toantd1202/buoc1/blob/master/Screenshot%20from%202020-04-02%2010-09-20.png?raw=true)
-
-
