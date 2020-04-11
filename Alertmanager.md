@@ -16,16 +16,19 @@ Các bước chính để thiết lập cảnh báo và thông báo là:
 ## 2. Alertmanager
 `Alertmanager` xử lý các cảnh báo được gửi bởi các ứng dụng khách như `Prometheus server`. Nó đảm nhiệm việc sao chép, nhóm và định tuyến chúng đến chính xác các máy thu như `email`. Nó cũng quan tâm đến `silencing` và `inhibition` cảnh báo.
 
-**Grouping** 
+**Grouping**
+
 `Grouping` phân loại cảnh báo có tính chất tương tự thành một thông báo. Nó đặc biệt hữu ích trong thời gian ngừng hoạt động dài, khi nhiều hệ thống bị lỗi cùng một lúc và hàng trăm đến hàng nghìn cảnh báo có thể được kích hoạt đồng thời.
 Ví dụ: Một hệ thống với nhiều server mất kết nối đến cơ sở dữ liệu, thay vì rất nhiều cảnh báo được gửi về `Alertmanager` thì `Grouping` giúp cho việc giảm số lượng cảnh báo trùng lặp, bằng một cảnh báo để chúng ta có thể biết được chuyện gì đang xảy ra với hệ thống đó.
 
 **Inhibition**
-Ức chế là một khái niệm ngăn chặn thông báo cho một số cảnh báo nhất định nếu một số cảnh báo khác đã được kích hoạt.
+
+`inhibition` là một khái niệm ngăn chặn thông báo cho một số cảnh báo nhất định nếu một số cảnh báo khác đã được kích hoạt.
 
 Ví dụ: Một cảnh báo được kích hoạt thông báo rằng toàn bộ cụm không thể truy cập được. `Alertmanager` có thể được cấu hình để tắt tất cả các cảnh báo khác liên quan đến cụm này nếu cảnh báo cụ thể đó được kích hoạt. Điều này ngăn thông báo cho hàng trăm hoặc hàng ngàn cảnh báo đến mà không liên quan đến vấn đề thực tế.
 
 **Silences**
+
 `Silence` là một cách đơn giản để tắt cảnh báo trong một thời gian nhất định. Nó được cấu hình dựa trên việc khớp với các điều kiện thì sẽ không có cảnh báo nào được gửi khi đó.
 
 **High availability**
@@ -186,7 +189,7 @@ route:
   receiver: default
 ```
   + Trong đó:
-    - group_by: Dòng này có ý nghĩa prometheus sẽ gom những thông báo có cùng `alertname` thành 1  và chỉ gửi duy nhất 1 thông báo đó - thông báo này sẽ có chứa những thông báo riêng rẽ.
+    - group_by: Dòng này có ý nghĩa prometheus sẽ gom những thông báo có cùng `alertname` thành 1  và chỉ gửi duy nhất 1 thông báo đó-thông báo này sẽ có chứa những thông báo riêng rẽ.
     - group_wait: Sau khi một cảnh báo được taọ ra. Phải đợi khoảng thời gian này thì cảnh báo mới được gửi đi. 
     - group_interval: Sau khi cảnh báo đầu tiên gửi đi, phải đợi 1 khoảng thời gian được cấu hình ở đây thì các cảnh báo sau mới được gửi đi. 
     - repeat_interval: 3h: Sau khi cảnh báo được gửi đi thành công. Sau khoảng thời gian này, nếu vấn đề vẫn còn tồn tại, prometheus sẽ tiếp tục gửi đi cảnh báo sau khoảng thời gian này.
@@ -201,6 +204,7 @@ route:
       severity: critical
     receiver: slack
 ```
+
 Nếu thông báo có nhãn `severity` với giá trị `warning` thì sẽ gửi đến đường đi gmail. Nếu thông báo có nhãn`severity` với giá trị là `critical` thì sẽ gửi đến đường đi slack.
 Ngoài ra, ta có thể sử dụng `regular expression` để match các labels, để từ đó tìm ra đường đi.
 ```  
@@ -208,6 +212,7 @@ Ngoài ra, ta có thể sử dụng `regular expression` để match các labels
       service: ^(foo1|foo2|baz)$
     receiver: slack
 ```
+
 Các labels là foo1 hoặc foo2 hoặc baz sẽ được gửi đến slack.
 + **Inhinition**: Có nghĩa là khi 1 cảnh báo được gửi đi, thì các cảnh báo phụ khác không cần phải gửi đi nữa.
 ```
