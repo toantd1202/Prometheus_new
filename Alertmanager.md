@@ -281,7 +281,7 @@ receivers:
       smarthost: smtp.gmail.com:587
       auth_username: "toantd1202@gmail.com"
       auth_identity: "toantd1202@gmail.com"
-      auth_password: "d16dcvt311"   
+      auth_password: "passwor"   
     slack_configs:
       - channel: 'toantd1202'
 ```
