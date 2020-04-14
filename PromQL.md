@@ -26,10 +26,11 @@ Các toán tử số học nhị phân sau tồn tại trong Prometheus:
 
 Toán tử số học nhị phân được xác định giữa các cặp vô hướng/vô hướng (scalars/scalars), vector/vô hướng (vector/scalars) và các cặp giá trị vector/vector.
 
-**Between two scalars**, như những phép tính toán giưa các hằng số.
-**Between an instant vector and a scalar**, các toán tử được áp dụng cho giá trị của mọi mẫu dữ liệu trong vector. Ví dụ, nếu một vector tức thời của chuỗi thời gian được nhân với một số bất kỳ, kết quả là một vectơ khác mà trong đó mọi giá trị mẫu của vectơ gốc được nhân với số đó.
+**Between two scalars**: Như những phép tính toán giưa các hằng số.
 
-**Between two instant vectors**, một toán tử số học nhị phân được áp dụng cho mỗi mục trong vectơ bên trái và phần tử khớp của nó trong vectơ bên phải. Kết quả được truyền vào vector kết quả với các nhãn nhóm trở thành bộ nhãn đầu ra. Metric name được loại bỏ.
+**Between an instant vector and a scalar**: Các toán tử được áp dụng cho giá trị của mọi mẫu dữ liệu trong vector. Ví dụ, nếu một vector tức thời của chuỗi thời gian được nhân với một số bất kỳ, kết quả là một vectơ khác mà trong đó mọi giá trị mẫu của vectơ gốc được nhân với số đó.
+
+**Between two instant vectors**: Một toán tử số học nhị phân được áp dụng cho mỗi mục trong vectơ bên trái và phần tử khớp của nó trong vectơ bên phải. Kết quả được truyền vào vector kết quả với các nhãn nhóm trở thành bộ nhãn đầu ra. Metric name được loại bỏ.
 
 #### So sánh toán tử nhị phân
 
@@ -49,13 +50,13 @@ Các toán tử so sánh nhị phân sau tồn tại trong Prometheus:
 
 Toán tử so sánh được xác định giữa các cặp giá trị scalar/scalar, vector/scalar và vector/vector. Theo mặc định chúng là các bộ lọc. Cách xử lý của chúng có thể được sửa đổi bằng việc cung cấp `bool` sau toán tử, sẽ trả về 0 hoặc 1 cho giá trị thay vì lọc.
 
-**Between two scalars** công cụ sửa đổi `bool` phải được cung cấp và các toán tử này trả về một giá trị vô hướng khác là 0 (sai) hoặc 1 (đúng), tùy thuộc vào giá trị so sánh.
+**Between two scalars**: Công cụ sửa đổi `bool` phải được cung cấp và các toán tử này trả về một giá trị vô hướng khác là 0 (sai) hoặc 1 (đúng), tùy thuộc vào giá trị so sánh.
 
-**Between an instant vector and a scalar**, các toán tử này được áp dụng cho giá trị của mọi mẫu dữ liệu trong vector và các phần tử vector, kết quả so sánh là sai được loại bỏ khỏi vector kết quả. Nếu công cụ sửa đổi `bool` được cung cấp, các phần tử vectơ sẽ bị loại bỏ thay vào đó có giá trị 0 và các phần tử vector sẽ được giữ có giá trị 1.
+**Between an instant vector and a scalar**: Các toán tử này được áp dụng cho giá trị của mọi mẫu dữ liệu trong vector và các phần tử vector, kết quả so sánh là sai được loại bỏ khỏi vector kết quả. Nếu công cụ sửa đổi `bool` được cung cấp, các phần tử vectơ sẽ bị loại bỏ thay vào đó có giá trị 0 và các phần tử vector sẽ được giữ có giá trị 1.
 
-**Between two instant vectors** các toán tử này hoạt động như một bộ lọc theo mặc định, được áp dụng cho các phần tương đồng. Các phần tử vector mà biểu thức không đúng hoặc không tìm thấy sự tương đồng ở phía bên kia của biểu thức bị loại bỏ khỏi kết quả, trong khi các phần tử khác được truyền vào một vectơ kết quả với các grouping labels được đặt thành nhãn đầu ra. Nếu công cụ sửa đổi `bool` được cung cấp, các phần tử vectơ sẽ bị loại bỏ thay vào đó có giá trị 0 và các phần tử vectơ sẽ được giữ giá trị 1, với các grouping label lại trở thành bộ nhãn đầu ra.
+**Between two instant vectors**: Các toán tử này hoạt động như một bộ lọc theo mặc định, được áp dụng cho các phần tương đồng. Các phần tử vector mà biểu thức không đúng hoặc không tìm thấy sự tương đồng ở phía bên kia của biểu thức bị loại bỏ khỏi kết quả, trong khi các phần tử khác được truyền vào một vectơ kết quả với các grouping labels được đặt thành nhãn đầu ra. Nếu công cụ sửa đổi `bool` được cung cấp, các phần tử vectơ sẽ bị loại bỏ thay vào đó có giá trị 0 và các phần tử vectơ sẽ được giữ giá trị 1, với các grouping label lại trở thành bộ nhãn đầu ra.
 
-**Logical/set binary operators** chỉ xác định giữa các instant vectors:
+**Logical/set binary operators**: Chỉ xác định giữa các instant vectors:
 
 + `and` (intersection)
 
@@ -115,7 +116,6 @@ Liên quan đến trường hợp mỗi phần tử vectơ ở `one`-side có th
 ```
 Danh sách nhãn được cung cấp với công cụ sửa đổi nhóm chứa các nhãn bổ sung từ `one`-side được đưa vào result metrics. Đối với `on`, một nhãn chỉ có thể xuất hiện ở một trong các danh sách. Mỗi time series của vector kết quả phải được xác định duy nhất.
 
-  
 Group modifiers chỉ có thể được sử dụng để comparison và arithmetic. Các toán tử như `and`, `unless` và `or` thì các toán tử phù hợp với tất cả các mục có thể có trong vector bên phải theo mặc định.
 Example query:
 ```
@@ -124,14 +124,13 @@ method_code:http_errors:rate5m / ignoring(code) group_left method:http_requests:
 Trong trường hợp này, vectơ bên trái chứa nhiều mục nhập trên mỗi `method label value`. Vì vậy, chúng ta chỉ ra điều này bằng cách sử dụng `group_left`. Các phần tử từ phía bên phải hiện được khớp với nhiều phần tử có cùng nhãn phương thức ở bên trái:
 
 ```
-
-`{method="get", code="500"}  0.04            //  24 / 600`
-`{method="get", code="404"}  0.05            //  30 / 600`
-`{method="post", code="500"} 0.05            //   6 / 120`
-`{method="post", code="404"} 0.175           //  21 / 120`
+{method="get", code="500"}  0.04            //  24 / 600
+{method="get", code="404"}  0.05            //  30 / 600
+{method="post", code="500"} 0.05            //   6 / 120
+{method="post", code="404"} 0.175           //  21 / 120
 ```
 
-`Many-to-one` và `one-to-many`  matching là các trường hợp sử dụng nâng cao cần được xem xét cẩn thận. Thông thường việc sử dụng đúng cách ignoring(label) cung cấp kết quả mong muốn.
+`Many-to-one` và `one-to-many` matching là các trường hợp sử dụng nâng cao cần được xem xét cẩn thận. Thông thường việc sử dụng đúng cách `ignoring(label)` cung cấp kết quả mong muốn.
 
 #### Aggregation operations
 
@@ -169,7 +168,7 @@ or
 ```
 `label list` là danh sách các nhãn không được trích dẫn có thể bao gồm dấu phẩy, nghĩa là cả hai `(label1, label2)` và `(label1, label2, )` là cú pháp hợp lệ.
 
-`Without` loại bỏ các nhãn được liệt kê khỏi vector kết quả, trong khi tất cả các nhãn khác được bảo toàn đầu ra. `by` làm ngược lại và bỏ các nhãn không được liệt kê trong mệnh đề by, ngay cả khi các giá trị nhãn của chúng giống hệt nhau giữa tất cả các phần tử của vectơ.
+`Without` loại bỏ các nhãn được liệt kê khỏi vector kết quả, trong khi tất cả các nhãn khác được bảo toàn đầu ra. `by` làm ngược lại và bỏ các nhãn không được liệt kê trong mệnh đề by, ngay cả khi các giá trị nhãn của chúng giống hệt nhau giữa tất cả các phần tử của vector.
 
 `parameter` chỉ được yêu cầu cho `Count_values`, `quantile`, `topk` và `bottomk`.
 
@@ -210,8 +209,8 @@ Danh sách sau đây cho thấy sự ưu tiên của các toán tử nhị phân
 Các toán tử trên cùng mức độ ưu tiên sẽ tính từ trái qua. Ví dụ: `2 * 3% 2` tương đương với `(2 * 3)% 2`. Tuy nhiên `^`thì ngược lại, vì vậy `2 ^ 3 ^ 2` tương đương với `2 ^ (3 ^ 2)`.
 ## Functions
 Một số hàm có đối số mặc định.
- ví dụ: `year(v=vector (time()) instant-vector)`
- Điều này có nghĩa là có một đối số `v` là một instant vector, nếu không được cung cấp, nó sẽ mặc định là giá trị của biểu thức `vector(time ())`.
+ví dụ: `year(v=vector (time()) instant-vector)`
+Điều này có nghĩa là có một đối số `v` là một instant vector, nếu không được cung cấp, nó sẽ mặc định là giá trị của biểu thức `vector(time ())`.
 
 **abs()**
 
@@ -232,7 +231,7 @@ absent(sum(nonexistent{job="myjob"}))
 # => {}
 ```
 
-Trong hai ví dụ đầu tiên, `absent()` cố gắng nhanh chóng về việc lấy nhãn của vectơ đầu ra 1 phần tử từ vectơ đầu vào. :))
+Trong hai ví dụ đầu tiên, `absent()` cố gắng lấy nhãn của vector đầu ra 1 phần tử từ vectơ đầu vào.
 
 **absent_over_time()**
 
@@ -249,7 +248,7 @@ absent_over_time(sum(nonexistent{job="myjob"})[1h:])
 # => {}
 ```
 
-Trong hai ví dụ đầu tiên, `absent_over_time ()` cố gắng nhanh chóng về việc lấy nhãn của vectơ đầu ra 1 phần tử từ vectơ đầu vào.
+Trong hai ví dụ đầu tiên, `absent_over_time ()` cố gắng lấy nhãn của vectơ đầu ra 1 phần tử từ vectơ đầu vào.
 
 **ceil()**
 
@@ -259,30 +258,29 @@ Trong hai ví dụ đầu tiên, `absent_over_time ()` cố gắng nhanh chóng 
 
 Đối với mỗi input time series, `changes(v range-vector)` trả về số lần giá trị của nó đã thay đổi trong phạm vi thời gian được cung cấp dưới dạng một instant vector.
 
-  
-
 **clamp_max()**
 
-`clamp_max (v instant-vector , max scalar)` clamps các giá trị mẫu của tất cả các phần tử trong `v` để có giới hạn trên là `max`.
+`clamp_max(v instant-vector , max scalar)` clamps các giá trị mẫu của tất cả các phần tử trong `v` để có giới hạn trên là `max`.
 
 **clamp_min()**  
-`clamp_min (v instant-vector, min scalar)` clamps các giá trị mẫu của tất cả các phần tử trong `v` để có giới hạn dưới là `min`.
+
+`clamp_min(v instant-vector, min scalar)` clamps các giá trị mẫu của tất cả các phần tử trong `v` để có giới hạn dưới là `min`.
 
 **day_of_month()**
 
-`day_of_month (v=vector(time()) instant-vector)` trả về ngày trong tháng cho mỗi thời điểm đã cho trong UTC. Giá trị trả về là từ 1 đến 31.
+`day_of_month(v=vector(time()) instant-vector)` trả về ngày trong tháng cho mỗi thời điểm đã cho trong UTC. Giá trị trả về là từ 1 đến 31.
 
 **day_of_week()**
 
-`day_of_week (v=vector (time ()) instant-vector)` trả về ngày trong tuần cho mỗi thời điểm đã cho trong UTC. Các giá trị được trả về là từ 0 đến 6, trong đó 0 có nghĩa là Sunday.
+`day_of_week(v=vector (time ()) instant-vector)` trả về ngày trong tuần cho mỗi thời điểm đã cho trong UTC. Các giá trị được trả về là từ 0 đến 6, trong đó 0 có nghĩa là Sunday.
 
 **days_in_month()**
 
-`days_in_month (v=vector(time ()) instant-vector)` trả về số ngày trong tháng cho mỗi lần nhất định trong UTC. Giá trị trả về là từ 28 đến 31.
+`days_in_month(v=vector(time ()) instant-vector)` trả về số ngày trong tháng cho mỗi lần nhất định trong UTC. Giá trị trả về là từ 28 đến 31.
 
 **delta()**
   
-`delta (v range-vector)` tính toán sự khác biệt giữa giá trị đầu tiên và giá trị cuối cùng của mỗi phần tử time series trong một range-vector `v`, trả về một instant vector với các vùng deltas đã cho và các nhãn tương đương. Delta được ngoại suy để bao trùm phạm vi toàn thời gian như được chỉ định trong bộ chọn vectơ phạm vi, do đó có thể nhận được kết quả không nguyên ngay cả khi các giá trị mẫu là tất cả các số nguyên.
+`delta(v range-vector)` tính toán sự khác biệt giữa giá trị đầu tiên và giá trị cuối cùng của mỗi phần tử time series trong một range-vector `v`, trả về một instant vector với các vùng deltas đã cho và các nhãn tương đương. Delta được ngoại suy để bao trùm phạm vi toàn thời gian như được chỉ định trong bộ chọn vectơ phạm vi, do đó có thể nhận được kết quả không nguyên ngay cả khi các giá trị mẫu là tất cả các số nguyên.
 
 ví dụ: Biểu thức ví dụ sau đây trả về chênh lệch nhiệt độ CPU trong khoảng thời gian từ bây giờ đến 2 giờ trước:
 
@@ -294,7 +292,7 @@ delta(cpu_temp_celsius{host="zeus"}[2h])
 
 **deriv()**
 
-`deriv(v range-vector)` Tính đạo hàm mỗi giây của time series trong một vectơ phạm vi `v`, sử dụng hồi quy tuyến tính đơn giản.
+`deriv(v range-vector)` Tính đạo hàm mỗi giây của time series trong một vector phạm vi `v`, sử dụng hồi quy tuyến tính đơn giản.
 
 `deriv` chỉ nên được sử dụng với gauges.
 
@@ -307,7 +305,6 @@ delta(cpu_temp_celsius{host="zeus"}[2h])
 + exp(NaN) = NaN
 
 **floor()**
-
   
 `floor(v instant-vector)` làm tròn các giá trị mẫu của tất cả các phần tử trong `v` xuống số nguyên gần nhất.
 
@@ -322,7 +319,7 @@ Ví dụ: Một histogram metric được gọi là `http_request_duration_secon
 ```
 histogram_quantile(0.9, rate(http_request_duration_seconds_bucket[10m]))
 ```
-Lượng tử được tính cho mỗi kết hợp nhãn trong `http_request_duration_seconds`. Để tổng hợp, sử dụng hàm `sum()` xung quanh hàm rate (). Vì nhãn `le` được yêu cầu bởi `histogram_quantile()`, nên nó phải được bao gồm trong mệnh đề `by`. Biểu thức sau đây tổng hợp phân vị thứ 90 theo công việc:
+Lượng tử được tính cho mỗi kết hợp nhãn trong `http_request_duration_seconds`. Để tổng hợp, sử dụng hàm `sum()` xung quanh hàm rate(). Vì nhãn `le` được yêu cầu bởi `histogram_quantile()`, nên nó phải được bao gồm trong mệnh đề `by`. Biểu thức sau đây tổng hợp phân vị thứ 90 theo công việc:
 
 ```
 histogram_quantile(0.9, sum(rate(http_request_duration_seconds_bucket[10m])) by (job, le))
@@ -342,8 +339,6 @@ increase(http_requests_total{job="api-server"}[5m])
 ```
 
 `increase` chỉ nên được sử dụng với counters.
-
-  
 
 **rate()**
 `rate(v range-vector)` tính tốc độ tăng trung bình mỗi giây của chuỗi thời gian trong range-vector.
