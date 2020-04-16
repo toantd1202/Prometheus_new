@@ -10,7 +10,7 @@ Cảnh báo với `Prometheus` được tách thành hai phần.
 
 Các bước chính để thiết lập cảnh báo và thông báo là:
 + Cài đặt và cấu hình `Alertmanager`
-+ Cấu hình `Prometheus` để nói chuyện với `Alertmanager`
++ Cấu hình `Prometheus` để giao tiếp với `Alertmanager`
 + Tạo quy tắc cảnh báo trong `Prometheus`
 
 ## 2. Alertmanager
@@ -30,9 +30,6 @@ Ví dụ: Một cảnh báo được kích hoạt thông báo rằng toàn bộ 
 **Silences**
 
 `Silence` là một cách đơn giản để tắt cảnh báo trong một thời gian nhất định. Nó được cấu hình dựa trên việc khớp với các điều kiện thì sẽ không có cảnh báo nào được gửi khi đó.
-
-**High availability**
-`Alertmanager` hỗ trợ cấu hình để tạo một cụm cho tính sẵn sàng cao. Điều này có thể được cấu hình bằng cách sử dụng các cờ `--cluster- *`.
 
 ## 3. Cài đặt
 + Xử lý file `docker-compose.yml`
@@ -214,7 +211,9 @@ Ngoài ra, ta có thể sử dụng `regular expression` để match các labels
 ```
 
 Các labels là foo1 hoặc foo2 hoặc baz sẽ được gửi đến slack.
+
 + **Inhinition**: Có nghĩa là khi 1 cảnh báo được gửi đi, thì các cảnh báo phụ khác không cần phải gửi đi nữa.
+
 ```
 inhibit_rules:
 - source_match:
@@ -224,6 +223,7 @@ inhibit_rules:
   # Apply inhibition if the alertname is the same.
   equal: ['alertname']
 ```
+
 Ví dụ: Khi cảnh báo có nhãn `critical` được gửi đi, thì các cảnh báo `warning` không cần phải gửi đi nữa, áp dụng với các cảnh báo có cùng `alertname`.
 
 + **Phần receivers**: Là nơi sẽ cấu hình các thông tin nơi nhận.
@@ -287,8 +287,10 @@ receivers:
 ```
 
 + Vào Gmail xem có thư báo không nào:
-![Screenshot from 2020-04-12 01-49-20](https://user-images.githubusercontent.com/61723456/79052690-8815f100-7c62-11ea-831e-07e06b592b35.png)
+
+![](https://user-images.githubusercontent.com/61723456/79052690-8815f100-7c62-11ea-831e-07e06b592b35.png)
 
 + Vào Slack kiểm tra thông báo:
-![Screenshot from 2020-04-12 01-48-48](https://user-images.githubusercontent.com/61723456/79052695-9401b300-7c62-11ea-8ea1-928d1a053295.png)
+
+![](https://user-images.githubusercontent.com/61723456/79052695-9401b300-7c62-11ea-8ea1-928d1a053295.png)
 
