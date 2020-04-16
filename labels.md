@@ -1,8 +1,6 @@
-
-
 # Labels
 
-+ Mỗi chuỗi thời gian được xác định duy nhất bởi metric name và các cặp tùy chọn key-value được gọi là nhãn.
++ `Time series` được xác định duy nhất bởi metric name và các cặp tùy chọn key-value được gọi là nhãn.
 + Thay đổi bất kỳ giá trị nhãn nào, bao gồm thêm hoặc xóa nhãn, sẽ tạo ra chuỗi thời gian mới.
 ```
 <metric name>{<label name>=<label value>, ...}
@@ -10,10 +8,10 @@
 Ví dụ: số liệu `http_requests_total` biểu thị tất cả các điểm dữ liệu được Prometheus thu thập cho các dịch vụ hiển thị bộ đếm `http requests`. Vì có thể có nhiều dịch vụ hiển thị cùng một số liệu `http_requests_total`, các nhãn có thể được thêm vào từng điểm dữ liệu để chỉ định dịch vụ mà bộ đếm này áp dụng:
 ```
 # Bộ đếm yêu cầu cho dịch vụ users-directory
-Http_requests_total{service='users-directory'}
+http_requests_total{service='users-directory'}
 
 # Bộ đếm yêu cầu cho dịch vụ Lịch sử thanh toán
-Http_requests_total{service='billing-history'}
+http_requests_total{service='billing-history'}
 ```
 
 + Các nhãn có thể được kết hợp theo một số cách khác nhau bằng cách sử dụng các hàm, để đáp ứng một loạt các yếu cầu từ tất cả các dữ liệu được Prometheus thu thập.
@@ -23,6 +21,7 @@ Sum (http_Vquests_total {service='users-directory', method='GET', endpoint='/use
 ```
 
 + Lọc dựa trên nhãn
+
 Như được mô tả trong các ví dụ trên, có thể lọc một số liệu dựa trên giá trị của một trong các nhãn:
 ```
 # Chỉ xem xét dịch vụ users-directory
