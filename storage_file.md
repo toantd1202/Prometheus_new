@@ -48,7 +48,7 @@ Cấu trúc của thư mục dữ liệu của máy chủ Prometheus sẽ trông
 Prometheus có một số cờ cho phép cấu hình bộ nhớ cục bộ:
 + `--storage.tsdb.path`: Xác định nơi Prometheus viết cơ sở dữ liệu của nó. Mặc định cho `data/`.
 + `--storage.tsdb.retention.time`: Xác định khi nào cần xóa dữ liệu cũ. Mặc định là 15ngày. Ghi đè `--storage.tsdb.retention`, cờ này được đặt cho bất kỳ thứ gì ngoài các giá trị mặc định.
-+ `--storage.tsdb.retention.size`: [EXPERIMENTAL], xác định số byte tối đa mà các khối lưu trữ có thể sử dụng (lưu ý rằng điều này không bao gồm kích thước WAL). Dữ liệu cũ nhất sẽ bị xóa đầu tiên. Mặc định là 0 hoặc disabled. Cờ này là thử nghiệm và có thể được thay đổi trong phiên bản tương lai. Các đơn vị được hỗ trợ: KB, MB, GB, PB. 
++ `--storage.tsdb.retention.size`: Xác định số byte tối đa mà các khối lưu trữ có thể sử dụng (lưu ý rằng điều này không bao gồm kích thước WAL). Dữ liệu cũ nhất sẽ bị xóa đầu tiên. Mặc định là 0 hoặc disabled. Cờ này là thử nghiệm và có thể được thay đổi trong phiên bản tương lai. Các đơn vị được hỗ trợ: KB, MB, GB, PB. 
 ví dụ: `512MB`
 + `--storage.tsdb.wal-compression`: Cờ này cho phép nén `log WAL`. Tùy thuộc vào dữ liệu, bạn có thể mong đợi kích thước `WAL` được giảm một nửa. Lưu ý rằng nếu bật cờ này và sau đó hạ cấp Prometheus xuống phiên bản bên dưới 2.11.0, bạn sẽ cần xóa WAL vì nó sẽ không thể đọc được.
 
@@ -78,7 +78,8 @@ Dọn dẹp `expired block` xảy ra trên một nền lịch trình. Có thể 
 `read` và `write protocol` đều sử dụng một cách linh hoạt giao thức nén đệm mã hóa HTTP. Các giao thức được coi là không ổn định như APIs, có thể thay đổi để sử dụng gRPC tốt hơn HTTP/2 trong tương lai, khi nhảy giữa Prometheus và `remote storage` có thể an toàn được giả định để hỗ trợ HTTP/2.
 
 **Remote read**
-![Screenshot from 2020-04-14 16-48-39](https://user-images.githubusercontent.com/61723456/79238633-d234e780-7e99-11ea-9da2-a46f5a3cc4ae.png)
+
+![](https://user-images.githubusercontent.com/61723456/79238633-d234e780-7e99-11ea-9da2-a46f5a3cc4ae.png)
 
 Khi cấu hình, Prometheus lưu trữ các truy vấn (ví dụ qua HTTP API) được gửi đến cả `local` và `remote storage`, các kết quả là đồng nhất.
 
@@ -124,7 +125,8 @@ tls_config:
 [ proxy_url: <string> ]
 ```
 **Remote write**
-![Screenshot from 2020-04-14 16-48-53](https://user-images.githubusercontent.com/61723456/79238692-e7aa1180-7e99-11ea-82a1-7325cf4a6004.png)
+
+![](https://user-images.githubusercontent.com/61723456/79238692-e7aa1180-7e99-11ea-82a1-7325cf4a6004.png)
 
 + Khi cấu hình, Prometheus chuyển tiếp mẫu nó lấy được cho một hoặc nhiều xa remote storage.
 + Hàng đợi là một tập hợp các "shards" được quản lý động: tất cả các mẫu cho bất kỳ chuỗi thời gian cụ thể nào (tức là số liệu duy nhất) sẽ kết thúc trên cùng một shard.
