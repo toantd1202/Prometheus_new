@@ -333,3 +333,72 @@ scrape_configs:
     - targets:
         - localhost:9101
 ```
+
+# Blackbox exporter
+Các đề xuất khi triển khai các `exporter` là chạy ngay bên cạnh mỗi ứng dụng, có những trường hợp không thể thực hiện được vì lý do kỹ thuật. Đây thường là trường hợp với giám sát `blackbox`- giám sát hệ thống từ bên ngoài mà không biết thông tin chi tiết bên trong hệ thống.
+
+Nếu đang theo dõi xem một dịch vụ web có hoạt động theo các tiêu chuẩn của người dùng hay không, bạn thường muốn theo dõi thông qua các `load balancers` và `virtual IP` (VIP) mà người dùng đang sử dụng. Bạn có thể chính xác điều hành một `exporter` bằng `VIP` vì nó là ảo.
+
+Blackbox exporter cho phép bạn thực hiện việc thăm dò ICMP, TCP, HTTP và DNS.
+
+## ICMP
+Internet Control Message Protocol (Giao thức điều khiển tin nhắn Internet) là một phần của Internet Protocal (IP). Trong `Blackbox exporter`, đó là tin nhắn `echo reply` và `echo request`, thường được gọi là `ping`.
+
+ICMP sử dụng các socket thô nên nó đòi hỏi nhiều đặc quyền hơn một exporter thông thường. Trên Linux, thay vào đó, bạn có thể cung cấp cho `Blackbox exporter` khả năng CAP_NET_RAW.
+
+/metrics của `Blackbox exporter` cung cấp metrics về `Blackbox exporter`, chẳng hạn như số lượng CPU đã sử dụng. Để thực hiện thăm dò `blackbox`, ta sử dụng /probe.
+
+Ngoài ra còn có các metrics hữu ích khác mà tất cả các loại probes tạo ra. 
++ `probe_ip_protocol` chỉ ra giao thức IP được sử dụng
++ `probe_duration_seconds` là toàn bộ thời gian thăm dò, bao gồm cả phân giải tên miền DNS.
+
+## TCP
+Transmission Control Protocol là TCP trong TCP / IP. Nhiều chuẩn giao thức  sử dụng nó, bao gồm các trang web (HTTP), email (SMTP), remote login (Telnet và SSH) và trò chat (IRC). Trình thăm dò tcp của `Blackbox exporter` cho phép kiểm tra các dịch vụ TCP và thực hiện các cuộc hội thoại đơn giản cho những người sử dụng giao thức dự trên dòng văn bản.
+
+Định nghĩa của module `tcp_connect` trong blackbox.yml là:
+```
+tcp_connect:
+    prober: tcp
+```
+
+ Điều này sẽ cố gắng kết nối với mục tiêu của bạn và một khi nó được kết nối ngay lập tức, nó sẽ đóng kết nối. Module `ssh_banner` kiểm tra phản hồi cụ thể từ máy chủ từ xa:
+```
+ssh_banner:
+    prober: tcp
+    tcp:
+      query_response:
+      - expect: "^SSH-2.0-"
+```
+
+Đầu dò tcp cũng có thể kết nối qua TLS. Thêm một `tcp_connect_tls` vào tệp blackbox.yml của bạn với cấu hình sau:
+```
+tcp_connect_tls:
+    prober: tcp
+    tcp:
+      tls: true
+```
++ `probe_ssl_earest_cert_exiry` được tạo ra như một tác dụng phụ của việc thăm dò, cho biết khi nào chứng chỉ TLS/SSL của bạn sẽ hết hạn. Bạn có thể sử dụng điều này để bắt các chứng chỉ hết hạn trước khi chúng bị tắt. 
+
+Mặc dù HTTP là giao thức văn bản hướng dòng mà bạn có thể sử dụng đầu dò tcp, thay vào đó có một đầu dò http phù hợp hơn cho mục đích này.
+
+## HTTP
+HyperText Transfer Protocol - HTTP là nền tảng cho web hiện đại và có thể là hầu hết các dịch vụ bạn cung cấp sử dụng. Mặc dù hầu hết việc giám sát các ứng dụng web được thực hiện tốt nhất bằng cách quét các metrics của Prometheus qua HTTP, đôi khi bạn sẽ muốn thực hiện giám sát blackbox các dịch vụ HTTP của mình.
+
+Bạn có thể thấy thăm dò, nhưng cũng có một số số liệu hữu ích khác để gỡ lỗi, chẳng hạn như mã trạng thái, phiên bản HTTP và thời gian cho các giai đoạn khác nhau của yêu cầu.
+
+Đầu dò http có nhiều tùy chọn để cả hai ảnh hưởng đến cách yêu cầu được thực hiện và liệu phản hồi có được coi là thành công hay không. Bạn có thể chỉ định xác thực HTTP, tiêu đề, phần thân POST và sau đó trong kiểm tra phản hồi rằng mã trạng thái, phiên bản HTTP và phần thân có thể chấp nhận được không.
+
+## DNS
+Các thăm dò dns chủ yếu để thử nghiệm các máy chủ DNS. Ví dụ: kiểm tra xem tất cả các bản sao DNS của bạn có trả về kết quả không.
+Nếu bạn muốn kiểm tra xem máy chủ DNS của bạn có phản hồi qua TCP không, bạn có thể tạo một module trong blackbox.yml như thế này:
+```
+dns_tcp:
+    prober: dns
+    dns:
+      transport_protocol: "tcp"
+      query_name: "www.prometheus.io"
+```
+
+Đối với prober dns, tham số của target URL là địa chỉ IP hoặc tên máy chủ, theo sau là dấu hai chấm và sau đó là số cổng. Bạn cũng có thể chỉ cung cấp địa chỉ IP hoặc tên máy chủ, trong trường hợp đó, cổng DNS tiêu chuẩn 53 sẽ được sử dụng.
+
+Ngoài việc kiểm tra các máy chủ DNS, bạn cũng có thể sử dụng đầu dò dns để xác nhận rằng các kết quả cụ thể đang được trả về bởi sự phân giải DNS. Nhưng thông thường, bạn muốn đi xa hơn và liên lạc với dịch vụ được trả lại qua HTTP, TCP hoặc ICMP, trong trường hợp đó, một trong những probes đó có ý nghĩa hơn khi bạn kiểm tra DNS miễn phí.
