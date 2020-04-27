@@ -1,0 +1,69 @@
+version: '3.6'
+volumes:
+  prometheus-data1:
+services:
+  prometheus1:
+    container_name: prom1
+    image: prom/prometheus
+    ports:
+     - 9090:9090
+    command:
+     - --config.file=/etc/prometheus/prometheus.yml
+     - --web.listen-address=0.0.0.0:9090
+     - --storage.tsdb.path=/etc/prometheus
+    volumes:
+     - ./prometheus.yml:/etc/prometheus/prometheus.yml
+     - ./rulefile.yml:/etc/prometheus/rulefile.yml
+     - prometheus-data1:/prometheus
+  prometheus2:
+    container_name: prom2
+    image: prom/prometheus
+    ports:
+     - 9091:9091
+    command:
+     - --config.file=/etc/prometheus/prometheus.yml
+     - --web.listen-address=0.0.0.0:9091
+     - --storage.tsdb.path=/etc/prometheus
+    volumes:
+     - ./prometheus.yml:/etc/prometheus/prometheus.yml
+     - ./rulefile.yml:/etc/prometheus/rulefile.yml
+     - prometheus-data1:/prometheus
+  prometheus2:
+    container_name: prom2
+    image: prom/prometheus
+    ports:
+     - 9091:9091
+    command:
+     - --config.file=/etc/prometheus/prometheus.yml
+     - --web.listen-address=0.0.0.0:9091
+     - --storage.tsdb.path=/etc/prometheus
+    volumes:
+     - ./prometheus.yml:/etc/prometheus/prometheus.yml
+     - ./rulefile.yml:/etc/prometheus/rulefile.yml
+     - prometheus-data1:/prometheus
+  alertmanager1:
+    image: prom/alertmanager
+    container_name: am1
+    ports:
+     - 9093:9093
+    volumes:
+     - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml
+    command:
+     - --config.file=/etc/alertmanager/alertmanager.yml
+     - --storage.path=/alertmanager
+     - --cluster.peer=172.21.0.5:8001
+     - --cluster.listen-address=:8001
+     - --web.listen-address=:9093
+  alertmanager2:
+    image: prom/alertmanager
+    container_name: am2
+    ports:
+     - 9094:9094
+    volumes:
+     - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml
+    command:
+     - --config.file=/etc/alertmanager/alertmanager.yml
+     - --storage.path=/alertmanager
+     - --cluster.peer=172.21.0.4:8001
+     - --cluster.listen-address=:8001
+     - --web.listen-address=:9094
