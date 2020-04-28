@@ -1,6 +1,7 @@
 version: '3.6'
 volumes:
   prometheus-data1:
+  prometheus-data2:
 services:
   prometheus1:
     container_name: prom1
@@ -27,20 +28,7 @@ services:
     volumes:
      - ./prometheus.yml:/etc/prometheus/prometheus.yml
      - ./rulefile.yml:/etc/prometheus/rulefile.yml
-     - prometheus-data1:/prometheus
-  prometheus2:
-    container_name: prom2
-    image: prom/prometheus
-    ports:
-     - 9091:9091
-    command:
-     - --config.file=/etc/prometheus/prometheus.yml
-     - --web.listen-address=0.0.0.0:9091
-     - --storage.tsdb.path=/etc/prometheus
-    volumes:
-     - ./prometheus.yml:/etc/prometheus/prometheus.yml
-     - ./rulefile.yml:/etc/prometheus/rulefile.yml
-     - prometheus-data1:/prometheus
+     - prometheus-data2:/prometheus
   alertmanager1:
     image: prom/alertmanager
     container_name: am1
@@ -51,7 +39,7 @@ services:
     command:
      - --config.file=/etc/alertmanager/alertmanager.yml
      - --storage.path=/alertmanager
-     - --cluster.peer=172.21.0.5:8001
+     - --cluster.peer=am2:8001
      - --cluster.listen-address=:8001
      - --web.listen-address=:9093
   alertmanager2:
@@ -64,6 +52,6 @@ services:
     command:
      - --config.file=/etc/alertmanager/alertmanager.yml
      - --storage.path=/alertmanager
-     - --cluster.peer=172.21.0.4:8001
+     - --cluster.peer=am1:8001
      - --cluster.listen-address=:8001
      - --web.listen-address=:9094
