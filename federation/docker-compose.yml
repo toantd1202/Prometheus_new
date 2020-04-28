@@ -1,0 +1,33 @@
+version: '3.6'
+volumes:
+  prometheus-data1:
+  prometheus-data2:
+services:
+  prometheus1:
+    image: prom/prometheus
+    container_name: promX
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --web.listen-address=0.0.0.0:9090
+      - --storage.tsdb.path=/etc/prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus1.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data1:/prometheus
+  prometheus2:
+    image: prom/prometheus
+    container_name: promY
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --web.listen-address=0.0.0.0:9091
+      - --storage.tsdb.path=/etc/prometheus
+    ports:
+      - 9091:9091
+    volumes:
+      - ./prometheus2.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data2:/prometheus
+  node-exporter:
+    image: prom/node-exporter
+    ports:
+       - 9100:9100
