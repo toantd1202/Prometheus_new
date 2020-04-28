@@ -13,7 +13,7 @@ services:
      - --web.listen-address=0.0.0.0:9090
      - --storage.tsdb.path=/etc/prometheus
     volumes:
-     - ./prometheus.yml:/etc/prometheus/prometheus.yml
+     - ./prometheus1.yml:/etc/prometheus/prometheus.yml
      - ./rulefile.yml:/etc/prometheus/rulefile.yml
      - prometheus-data1:/prometheus
   prometheus2:
@@ -26,7 +26,7 @@ services:
      - --web.listen-address=0.0.0.0:9091
      - --storage.tsdb.path=/etc/prometheus
     volumes:
-     - ./prometheus.yml:/etc/prometheus/prometheus.yml
+     - ./prometheus2.yml:/etc/prometheus/prometheus.yml
      - ./rulefile.yml:/etc/prometheus/rulefile.yml
      - prometheus-data2:/prometheus
   alertmanager1:
