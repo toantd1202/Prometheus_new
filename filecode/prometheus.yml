@@ -1,9 +1,14 @@
+#prometheus1.yml
+
 global:
   scrape_interval: 30s
 scrape_configs:
-- job_name: 'node'
+- job_name: 'prometheus'
   static_configs:
-  - targets: ['localhost:9090']
+  - targets: ['prometheus:9090','prometheus2:9091']
+- job_name: 'alertmanager'
+  static_configs:
+  - targets: ['am1:9093','am2:9094']
 alerting:
   alertmanagers:
   - scheme: http
@@ -11,3 +16,49 @@ alerting:
     - targets: ['am1:9093','am2:9094']
 rule_files:
   - rulefile.yml
+  
+  #prometheus2.yml
+  
+global:  
+  scrape_interval: 30s 
+scrape_configs:  
+      - job_name: 'prometheus'  
+        static_configs: 
+             - targets: ['prometheus1:9090','prometheus2:9091']
+      - job_name: 'alertmanager'  
+        static_configs: 
+             - targets: ['am1:9093','am2:9094']
+rule_files:  
+  - rulefile.yml
+alerting:
+  alertmanagers:
+  - scheme: http
+    static_configs:
+    - targets:
+      - am1:9093
+      - am2:9094
+
+#rulefile.yml
+groups:
+  - name: default
+    rules:
+    - alert: InstanceDown
+      expr: up == 0
+      for: 20s
+      annotations:
+        summary: "Instance {{ $labels.instance }} down"
+        description: "{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 20 seconds."
+
+# alertmanager.yml
+route:
+  group_by: ['Alertname']
+  receiver: gmail
+receivers:
+- name: 'gmail'
+  email_configs:
+  - to: 'toantd1202@gmail.com'
+    from: 'toantd1202@gmail.com'
+    smarthost: smtp.gmail.com:587
+    auth_username: "toantd1202@gmail.com"
+    auth_identity: "toantd1202@gmail.com"
+    auth_password: "PASSWORD"
